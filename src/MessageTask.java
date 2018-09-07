@@ -1,3 +1,5 @@
+
+
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.Future;
@@ -17,7 +19,7 @@ public class MessageTask implements Runnable
 
     public  void run()
     {
-        while (socket.isOpen())
+        while (true)
         {
             ByteBuffer buffer = ByteBuffer.allocate(4096);
             result = socket.read(buffer);
@@ -26,6 +28,16 @@ public class MessageTask implements Runnable
             buffer.flip();
             String msg = new String(buffer.array()).trim();
             System.out.println("Message from client: " + msg);
+            if (msg.equals("bye"))
+                break;
+            else if (msg.equals("a"))
+            {
+                try{Thread.sleep(4000);} catch (Exception po){}
+                System.out.println("four seconds");
+            }
+            else
+                System.out.println("right now");
+
         }
     }
 

@@ -24,6 +24,5 @@ public class ServerCompletionHandler implements CompletionHandler<AsynchronousSo
     {
         System.out.println(att + " - handler failed");
         e.printStackTrace();
-        currentThread.interrupt();
     }
 }

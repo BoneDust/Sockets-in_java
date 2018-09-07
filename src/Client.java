@@ -15,36 +15,42 @@ public class Client
 
     private void runClient()
     {
-        final int port = 5007;
+        final int port = 5002;
         try
         {
-            AsynchronousSocketChannel client = AsynchronousSocketChannel.open();
+            AsynchronousSocketChannel clientSocket = AsynchronousSocketChannel.open();
             InetSocketAddress hostAddress = new InetSocketAddress("localhost", port);
-            Future future = client.connect(hostAddress);
+            Future future = clientSocket.connect(hostAddress);
             future.get(); // returns null
             System.out.println("Client is started:");
             Scanner stdin = new Scanner(System.in);
-            String msg="";
             while (true)
             {
-                System.out.print("Sending message to server: ");
-                if (stdin.hasNextLine())
-                    msg = stdin.nextLine();
-                else
-                    break;
-                byte[] bytes = msg.getBytes();
-                ByteBuffer buffer = ByteBuffer.wrap(bytes);
-                Future result = client.write(buffer);
-                System.out.println(new String(buffer.array()).trim());
-                buffer.clear();
-                if (new String(buffer.array()).trim().equals("bye"))
+                String message = sendMessage(clientSocket, stdin);
+                if (message.equals("bye"))
                     break;
             }
-            client.close();
+            clientSocket.close();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    private String sendMessage(AsynchronousSocketChannel socket, Scanner stdin)
+    {
+        System.out.print("Sending message to server: ");
+        String msg = "";
+        if (stdin.hasNextLine())
+            msg = stdin.nextLine();
+        else
+            msg = "bye";
+        byte[] bytes = msg.getBytes();
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        Future result = socket.write(buffer);
+        System.out.println(new String(buffer.array()).trim());
+        buffer.clear();
+        return (msg);
     }
 }

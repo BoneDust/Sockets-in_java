@@ -22,7 +22,7 @@ public class Client
             InetSocketAddress hostAddress = new InetSocketAddress("localhost", port);
             Future future = client.connect(hostAddress);
             future.get(); // returns null
-            System.out.println("Client is started");
+            System.out.println("Client is started:");
             Scanner stdin = new Scanner(System.in);
             String msg="";
             while (true)

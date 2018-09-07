@@ -8,14 +8,14 @@ import java.util.concurrent.Future;
 
 public class Client
 {
-    public static void main (String [] args) throws InterruptedException
+    public static void main (String [] args)
     {
         new Client().runClient();
     }
 
-    private void runClient() throws  InterruptedException
+    private void runClient()
     {
-        final int port = 5002;
+        final int port = 5007;
         try
         {
             AsynchronousSocketChannel client = AsynchronousSocketChannel.open();
@@ -30,12 +30,14 @@ public class Client
                 System.out.print("Sending message to server: ");
                 if (stdin.hasNextLine())
                     msg = stdin.nextLine();
+                else
+                    break;
                 byte[] bytes = msg.getBytes();
                 ByteBuffer buffer = ByteBuffer.wrap(bytes);
                 Future result = client.write(buffer);
                 System.out.println(new String(buffer.array()).trim());
                 buffer.clear();
-                if (new String(buffer.array()).trim().equals("Bye"))
+                if (new String(buffer.array()).trim().equals("bye"))
                     break;
             }
             client.close();

@@ -33,6 +33,6 @@ public class ClientMessages implements Runnable
             }
             socket.close();
         }
-        catch (Exception ex){}
+        catch (Exception ex){   }
     }
 }

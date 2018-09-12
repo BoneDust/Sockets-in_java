@@ -1,17 +1,13 @@
 import java.nio.channels.*;
-import java.util.concurrent.ExecutorService;
+
 
 public class ServerCompletionHandler implements CompletionHandler<AsynchronousSocketChannel, Object>
 {
-    private ExecutorService threadPool;
     private AsynchronousServerSocketChannel server;
-    private Thread currentThread;
 
-    public ServerCompletionHandler(AsynchronousServerSocketChannel server, ExecutorService pool, Thread thread)
+    public ServerCompletionHandler(AsynchronousServerSocketChannel server)
     {
         this.server = server;
-        threadPool = pool;
-        currentThread  = thread;
     }
 
     public void completed(AsynchronousSocketChannel ch, Object att)
@@ -24,6 +20,5 @@ public class ServerCompletionHandler implements CompletionHandler<AsynchronousSo
     {
         System.out.println(att + " - handler failed");
         e.printStackTrace();
-        currentThread.interrupt();
     }
 }

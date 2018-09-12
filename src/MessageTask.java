@@ -12,12 +12,11 @@ public class MessageTask implements Runnable
     public MessageTask(AsynchronousSocketChannel socket)
     {
         this.socket = socket;
-
     }
 
     public  void run()
     {
-        while (socket.isOpen())
+        while (true)
         {
             ByteBuffer buffer = ByteBuffer.allocate(4096);
             result = socket.read(buffer);
@@ -25,8 +24,9 @@ public class MessageTask implements Runnable
                 ;
             buffer.flip();
             String msg = new String(buffer.array()).trim();
-            System.out.println("Message from client: " + msg);
+            System.out.println("Message received: " + msg);
+            if (msg.equals("bye"))
+                break;
         }
     }
-
 }

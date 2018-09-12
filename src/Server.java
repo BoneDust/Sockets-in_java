@@ -6,14 +6,11 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
-//todo have the serever accept multiple clients at once. need to reconfirm tbis Thread.currentThread().join() method
 
 public class Server
 {
-    static int clients = 0;
+
     static ExecutorService threadPool;
     public static void main(String[] args)
     {
@@ -34,7 +31,7 @@ public class Server
             server.bind(hostAddress);
             System.out.println("Server is listening on port: " + port);
             currentThread = Thread.currentThread();
-            server.accept("", new ServerCompletionHandler(server, threadPool, currentThread));
+            server.accept(null, new ServerCompletionHandler(server));
             try
             {
                 currentThread.join();
@@ -59,6 +56,8 @@ public class Server
     public static void handleConnection(AsynchronousSocketChannel socket)
     {
         MessageTask msgTask = new MessageTask(socket);
+        SendTask send = new SendTask(socket);
         threadPool.execute(msgTask);
+        threadPool.execute(send);
     }
 }
